@@ -27,3 +27,34 @@ fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawWifiSinifiedSignal(scale : Float, w : Float, h : Float, paint : Paint) {
+    val size : Float = Math.min(w, h) / sizeFactor
+    val gap : Float = size / arcs
+    val sf : Float = scale.sinify()
+    val sf1 : Float = sf.divideScale(0, arcs + 1)
+    save()
+    translate(w / 2, h / 2)
+    drawLine(0f, size * (1 - sf1), 0f, size, paint)
+    for (j in 0..1) {
+        save()
+        scale(1f - 2 * j, 1f)
+        for (i in 1..arcs) {
+            val rGap : Float = gap * i
+            val sfi : Float = sf.divideScale(i, arcs + 1)
+            val deg : Float = sweepDef * sfi
+            drawArc(RectF(-rGap, -rGap, rGap, rGap), startDeg + sweepDef / 2 - deg / 2, deg, false, paint)
+        }
+        restore()
+    }
+    restore()
+}
+
+fun Canvas.drawWSSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    paint.color = Color.parseColor(colors[i])
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    drawWifiSinifiedSignal(scale, w, h, paint)
+}
