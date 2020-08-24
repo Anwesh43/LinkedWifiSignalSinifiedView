@@ -130,7 +130,7 @@ class WifiSignalSinifiedView(ctx : Context) : View(ctx) {
         private var next : WSSNode? = null
 
         init {
-            next?.prev = this
+            addNeighbor()
         }
 
         fun addNeighbor() {
@@ -209,6 +209,14 @@ class WifiSignalSinifiedView(ctx : Context) : View(ctx) {
                 animator.start()
             }
         }
+    }
 
+    companion object {
+
+        fun create(activity : Activity) : WifiSignalSinifiedView {
+            val view : WifiSignalSinifiedView = WifiSignalSinifiedView(activity)
+            activity.setContentView(view)
+            return view
+        }
     }
 }
