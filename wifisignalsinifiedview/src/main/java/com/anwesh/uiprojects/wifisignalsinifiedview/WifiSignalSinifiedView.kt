@@ -16,12 +16,12 @@ import android.graphics.Canvas
 val colors : Array<String> = arrayOf("#F44336", "#03A9F4", "#4CAF50", "#673AB7", "#009688")
 val arcs : Int = 3
 val startDeg : Float = -30f
-val sweepDef : Float = 30f
+val sweepDef : Float = 60f
 val scGap : Float = 0.02f / (arcs + 1)
 val strokeFactor : Float = 90f
 val sizeFactor : Float = 4.5f
 val backColor : Int = Color.parseColor("#BDBDBD")
-val delay : Long = 20
+val delay : Long = 12
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -56,6 +56,7 @@ fun Canvas.drawWSSNode(i : Int, scale : Float, paint : Paint) {
     paint.color = Color.parseColor(colors[i])
     paint.strokeCap = Paint.Cap.ROUND
     paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.style = Paint.Style.STROKE
     drawWifiSinifiedSignal(scale, w, h, paint)
 }
 
