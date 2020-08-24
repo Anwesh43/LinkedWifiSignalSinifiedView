@@ -121,4 +121,45 @@ class WifiSignalSinifiedView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class WSSNode(var i : Int, val state : State = State()) {
+
+        private var prev : WSSNode? = null
+        private var next : WSSNode? = null
+
+        init {
+            next?.prev = this
+        }
+
+        fun addNeighbor() {
+            if (i < colors.size - 1) {
+                next = WSSNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawWSSNode(i, state.scale, paint)
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            state.update(cb)
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : WSSNode {
+            var curr : WSSNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
 }
